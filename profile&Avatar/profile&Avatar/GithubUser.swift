@@ -11,6 +11,7 @@ import SwiftUI
 struct GithubUser : Codable{
     let login :  String
     let name : String?
+    let company : String?
     let public_repos : Int
     let avatar_url : String
 }
