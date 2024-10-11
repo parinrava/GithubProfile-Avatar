@@ -5,10 +5,6 @@
   Created by Parin Ravanbakhsh on 2024-10-11.
   
 */
-"name_label" = "Name:";
-"login_label" = "Login Name:";
-"repos_label" = "Number of Public Repos:";
-"company_label" = "Company:";
 
 "name_label" = "İsim:";
 "login_label" = "Kullanıcı Adı:";
