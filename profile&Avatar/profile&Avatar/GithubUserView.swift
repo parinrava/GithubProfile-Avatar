@@ -22,22 +22,24 @@ class GithubUserView: ObservableObject {
 
     
     //start task using the url session to fetch
-    URLSession.shared.dataTask(with: url) { data, response, error in
-        if let data = data { // if the data successfully fetched
-            do {
-                //use the json decoder to decode the json response
-                let decoder = JSONDecoder()
-                let user = try decoder.decode(GithubUser.self, from:data)
-                //update the user property on the main thread to refresh the UI
-                DispatchQueue.main.async{
-                    self.user = user
+        URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
+            if let data = data {
+                do {
+                    // Use the JSON decoder to decode the JSON response
+                    let decoder = JSONDecoder()
+                    let user = try decoder.decode(GithubUser.self, from: data)
+                    
+                    // Update the user property on the main thread to refresh the UI
+                    DispatchQueue.main.async {
+                        self?.user = user // Use self? instead of self to avoid the crash
+                    }
+                } catch {
+                    // Print error message if JSON decoding fails
+                    print("Error decoding JSON:", error)
                 }
-            }catch{
-                //parint error message
-                print("error decoding json:", error)
             }
-        }
-        }.resume() //resume the data task to start
+        }.resume() // Resume the data task to start it
+
     }
 }
 
