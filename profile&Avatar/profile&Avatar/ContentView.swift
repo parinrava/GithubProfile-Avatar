@@ -11,40 +11,36 @@ struct ContentView: View {
     // Observing the GitHubUserView to get the user data and update the UI when it changes
     @ObservedObject var viewModel = GithubUserView()
     var body: some View {
-            VStack {
-                // Check if the user data has been fetched
-                if let user = viewModel.user {
-                    // Display the user's name (if available, otherwise show a default message)
-                    Text("Name: \(user.name ?? "No name available")")
-                        .font(.headline) 
-                    
-                    // Display the login name from the API
-                    Text("Login Name: \(user.login)")
-                        .font(.subheadline)
-                    //display the company name from API
-                    Text("Company : \(user.company ?? "no company available")")
-                        .font(.subheadline)
-                    
-                    // Display the number of public repositories
-                    Text("Number of Public Repos: \(user.public_repos)")
-                        .font(.body) // Apply a body font style
-                    
-                    // Load and display the avatar image using AsyncImage
-                    AsyncImage(url: URL(string: user.avatar_url)) { image in
-                    //once the image is loaded display it
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 100, height: 100) // Set the size of the avatar image
-                    } placeholder: {
-                        // Show a progress indicator while the image is loading
-                        ProgressView()
-                    }
-                } else {
-                    // Display a message while the API data is being fetched
-                    Text("Fetching GitHub user data...")
+        VStack {
+            if let user = viewModel.user {
+                // Display the localized string for "Name"
+                Text("\(NSLocalizedString("name_label", comment: "")) \(user.name ?? NSLocalizedString("no_name_available", comment: ""))")
+                    .font(.headline)
+                
+                // Display the localized string for "Login Name"
+                Text("\(NSLocalizedString("login_label", comment: "")) \(user.login)")
+                    .font(.subheadline)
+                
+                // Display the localized string for "Company"
+                Text("\(NSLocalizedString("company_label", comment: "")) \(user.company ?? NSLocalizedString("no_company_available", comment: ""))")
+                    .font(.subheadline)
+                
+                // Display the localized string for "Number of Public Repos"
+                Text("\(NSLocalizedString("repos_label", comment: "")) \(user.public_repos)")
+                    .font(.body)
+                
+                AsyncImage(url: URL(string: user.avatar_url)) { image in
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 100, height: 100)
+                } placeholder: {
+                    ProgressView()
                 }
+            } else {
+                Text(NSLocalizedString("fetching_data", comment: ""))
             }
+        }
             .onAppear {
                 // Call the fetchGitHubUser method when the view appears to trigger the data fetching
                 viewModel.fetchGithubUser()
